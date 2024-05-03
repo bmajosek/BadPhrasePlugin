@@ -42,11 +42,11 @@ public class PhraseQuickFix : QuickFixBase
     {
         var document = _comment.GetDocumentRange().Document;
 
-        int originalLength = _replacementRange.Length;
-        int replacementLength = _replacement.Length;
+        var originalLength = _replacementRange.Length;
+        var replacementLength = _replacement.Length;
 
-        int newStart = CalculateNewStartOffset(_replacementRange.StartOffset);
-        int newEnd = newStart + replacementLength;
+        var newStart = CalculateNewStartOffset(_replacementRange.StartOffset);
+        var newEnd = newStart + Math.Max(replacementLength, originalLength);
 
         document.ReplaceText(new TextRange(newStart, newEnd), _replacement);
 

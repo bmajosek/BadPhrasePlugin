@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi.Tree;
@@ -25,7 +26,7 @@ public class CommentAnalyzer : ElementProblemAnalyzer<IComment>
 
         foreach (var phrase in _phraseProvider.GetPhrases().Where(phrase => comment.Contains(phrase.Key)))
         {
-            int index = comment.IndexOf(phrase.Key); TextRange textRange = new(documentRange.TextRange.StartOffset + index, documentRange.TextRange.StartOffset + index + phrase.Key.Length);
+            var index = comment.IndexOf(phrase.Key); TextRange textRange = new(documentRange.TextRange.StartOffset + index, documentRange.TextRange.StartOffset + index + phrase.Key.Length);
             consumer.AddHighlighting(new BadPhraseHighlighting(element, phrase.Value, textRange));
         }
     }
