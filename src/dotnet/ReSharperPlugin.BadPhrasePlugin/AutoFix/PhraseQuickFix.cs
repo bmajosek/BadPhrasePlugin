@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
+using JetBrains.Application.CommandProcessing;
 using JetBrains.Application.Progress;
+using JetBrains.DocumentManagers;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.DocumentModel;
 using JetBrains.ProjectModel;
@@ -20,12 +24,9 @@ public class PhraseQuickFix : QuickFixBase
     private readonly IComment _comment;
     private readonly string _replacement;
     private readonly TextRange _replacementRange;
-    private readonly BadPhraseHighlighting _highlighting;
-    private int _cumulativeOffsetChange = 0;
 
     public PhraseQuickFix(BadPhraseHighlighting highlighting)
     {
-        _highlighting = highlighting;
         _comment = highlighting.Comment;
         _replacement = highlighting.SuggestedReplacement;
         _replacementRange = highlighting.ReplacementRange;
@@ -40,23 +41,12 @@ public class PhraseQuickFix : QuickFixBase
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-        var document = _comment.GetDocumentRange().Document;
+        return textControl =>
+        {
+            var document = _comment.GetDocumentRange().Document;
+            var range = new TextRange(_replacementRange.StartOffset, _replacementRange.EndOffset);
 
-        var originalLength = _replacementRange.Length;
-        var replacementLength = _replacement.Length;
-
-        var newStart = CalculateNewStartOffset(_replacementRange.StartOffset);
-        var newEnd = newStart + Math.Max(replacementLength, originalLength);
-
-        document.ReplaceText(new TextRange(newStart, newEnd), _replacement);
-
-        _cumulativeOffsetChange += (replacementLength - originalLength);
-
-        return null;
-    }
-
-    private int CalculateNewStartOffset(int originalStart)
-    {
-        return 2 + originalStart + _cumulativeOffsetChange;
+            document.ReplaceText(range, _replacement);
+        };
     }
 }

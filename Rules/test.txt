@@ -1,4 +1,0 @@
-Class ==> Claaas
-Bad ==> Good 
-Good Morning ==> Good Bye
-Test ==> Taki

@@ -23,24 +23,31 @@ public class PhraseProvider
     {
         var settings = settingsStore.BindToContextTransient(ContextRange.ApplicationWide);
         _directoryPath = settings.GetValue((BadPhraseSettings s) => s.DirectoryPath);
-
-        _watcher = new FileSystemWatcher(_directoryPath)
+        if (Directory.Exists(_directoryPath))
         {
-            NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName,
-            Filter = "*.txt"
-        };
+            _watcher = new FileSystemWatcher(_directoryPath)
+            {
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName,
+                Filter = "*.txt"
+            };
 
-        // Event handlers
-        _watcher.Changed += OnChanged;
-        _watcher.Created += OnChanged;
-        _watcher.Deleted += OnChanged;
-        _watcher.EnableRaisingEvents = true;
+            // Event handlers
+            _watcher.Changed += OnChanged;
+            _watcher.Created += OnChanged;
+            _watcher.Deleted += OnChanged;
+            _watcher.EnableRaisingEvents = true;
 
-        LoadPhrases();
+            LoadPhrases();
+        }
     }
 
     private void LoadPhrases()
     {
+        if (!Directory.Exists(_directoryPath))
+        {
+            return;
+        }
+
         _phrases.Clear();
         var files = Directory.GetFiles(_directoryPath, "*.txt");
         foreach (var file in files)

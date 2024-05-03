@@ -23,10 +23,12 @@ public class CommentAnalyzer : ElementProblemAnalyzer<IComment>
     {
         var comment = element.CommentText;
         var documentRange = element.GetDocumentRange();
+        var commentStartOffset = documentRange.TextRange.StartOffset + "//".Length;
 
         foreach (var phrase in _phraseProvider.GetPhrases().Where(phrase => comment.Contains(phrase.Key)))
         {
-            var index = comment.IndexOf(phrase.Key); TextRange textRange = new(documentRange.TextRange.StartOffset + index, documentRange.TextRange.StartOffset + index + phrase.Key.Length);
+            var index = comment.IndexOf(phrase.Key);
+            TextRange textRange = new(commentStartOffset + index, commentStartOffset + index + phrase.Key.Length);
             consumer.AddHighlighting(new BadPhraseHighlighting(element, phrase.Value, textRange));
         }
     }
