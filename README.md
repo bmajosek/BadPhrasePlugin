@@ -1,7 +1,7 @@
 # BadPhrasePlugin for ReSharper
 [![ReSharper](https://img.shields.io/jetbrains/plugin/v/RESHARPER_PLUGIN_ID.svg?label=ReSharper&colorB=0A7BBB&style=for-the-badge&logo=resharper)](https://plugins.jetbrains.com/plugin/RESHARPER_PLUGIN_ID)
 
-The Bad Phrase Plugin is a ReSharper extension designed to improve code quality by detecting and suggesting replacements for discouraged or suboptimal phrases found within code comments. This plugin supports both C# and Kotlin projects within JetBrains ReSharper environments.
+The Bad Phrase Plugin is a ReSharper extension designed to improve code quality by detecting and suggesting replacements for discouraged or suboptimal phrases found within code comments. This plugin supports C# projects within JetBrains ReSharper environments.
 
 ## Features
 
